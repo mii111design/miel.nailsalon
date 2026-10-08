@@ -40,7 +40,7 @@
     const url = validUrl(config[key + 'Url'], key);
     if (!url) return;
     document.querySelectorAll(`[data-link="${key}"]`).forEach(link => { link.href = url; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.removeAttribute('aria-disabled'); });
-    document.querySelector(`[data-status="${key}"]`).textContent = key === 'square' ? 'Squareの予約ページで空き状況をご確認いただけます。' : '';
+    document.querySelector(`[data-status="${key}"]`).textContent = key === 'square' ? 'Squareの予約ページが別タブで開きます。' : '';
   });
   if (config.transparentLogo) {
     const logo = document.querySelector('.hero-logo');
@@ -58,25 +58,5 @@
   dialog.querySelector('.close').addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', event => { if (event.target === dialog) { const rect = dialog.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close(); } });
   dialog.addEventListener('close', () => { document.body.classList.remove('locked'); if (previousFocus) previousFocus.focus(); });
-  const calendarDate = new Date();
-  calendarDate.setDate(1);
-  function renderCalendar() {
-    const year = calendarDate.getFullYear(), month = calendarDate.getMonth();
-    document.querySelector('.calendar-month').textContent = `${year}年 ${month + 1}月`;
-    const grid = document.querySelector('.calendar-days');
-    grid.replaceChildren();
-    const start = new Date(year, month, 1).getDay();
-    const count = new Date(year, month + 1, 0).getDate();
-    for (let index = 0; index < Math.ceil((start + count) / 7) * 7; index++) {
-      const cell = document.createElement('span');
-      const day = index - start + 1;
-      if (day > 0 && day <= count) { cell.textContent = String(day); cell.setAttribute('aria-label', `${month + 1}月${day}日`); }
-      else cell.setAttribute('aria-hidden', 'true');
-      grid.append(cell);
-    }
-  }
-  document.querySelector('.calendar-prev').addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() - 1); renderCalendar(); });
-  document.querySelector('.calendar-next').addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() + 1); renderCalendar(); });
-  renderCalendar();
   document.getElementById('year').textContent = new Date().getFullYear();
 })();
